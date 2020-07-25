@@ -38,6 +38,7 @@ class Login extends React.Component {
 		this.state = {
 			selectedUser: '',
 			errorMessage: '',
+			isBusy: false,
 		};
 	}
 
