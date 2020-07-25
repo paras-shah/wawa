@@ -1,10 +1,7 @@
 import React from 'react';
 import { Grid, Container } from '@material-ui/core/';
-import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
+
 import {
 	signInAction,
 	signOutAction,
@@ -14,6 +11,7 @@ import {
 } from '../actions';
 import { connect } from 'react-redux';
 import OrderColumn from './OrderColumn';
+import WidgetHeader from './WidgetHeader';
 
 const useStyles = withStyles((theme) => ({
 	root: {
@@ -36,19 +34,11 @@ class Login extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedUser: '',
 			errorMessage: '',
 			isBusy: false,
 		};
 		console.log('const');
 	}
-
-	handleChange = (event) => {
-		const value = event.target.value;
-		this.setState((state) => {
-			return { ...state, selectedUser: value };
-		});
-	};
 
 	updateStatus = (value) => {
 		this.setState((state) => {
@@ -86,6 +76,15 @@ class Login extends React.Component {
 		return order.length ? order[0].orders : null;
 	};
 
+	setErrorMessage = (msg) => {
+		this.setState((state, props) => {
+			return {
+				...state,
+				errorMessage: msg,
+			};
+		});
+	};
+
 	render() {
 		const { classes } = this.props;
 		console.log('render', this.state.isBusy);
@@ -99,106 +98,23 @@ class Login extends React.Component {
 							)}
 							<h1>Staff </h1>
 						</Grid>
-						<Grid container item xs={12} md={6}>
-							<Grid item xs={12} md={6}>
-								{!this.props.isAuthenticated && (
-									<FormControl
-										variant="outlined"
-										className={classes.selectUser}
-									>
-										<InputLabel htmlFor="outlined-age-native-simple">
-											Select Username
-										</InputLabel>
-										<Select
-											native
-											value={this.state.selectedUser}
-											onChange={this.handleChange}
-											label="Username"
-										>
-											<option
-												aria-label="None"
-												value=""
-											/>
-											{this.props.users &&
-												this.props.users.length &&
-												this.props.users.map((user) => {
-													return (
-														<option
-															key={user.id}
-															value={
-																user.username
-															}
-														>
-															{user.username}
-														</option>
-													);
-												})}
-										</Select>
-									</FormControl>
-								)}
-							</Grid>
-							<Grid item xs={12} md={6}>
-								{!this.props.isAuthenticated && (
-									<Button
-										variant="contained"
-										color="primary"
-										onClick={(e) => {
-											if (
-												this.state.selectedUser !== ''
-											) {
-												this.setState(
-													(state, props) => {
-														return {
-															...state,
-															errorMessage: '',
-														};
-													}
-												);
-												this.props.signInAction(
-													this.state.selectedUser
-												);
-											} else {
-												this.setState(
-													(state, props) => {
-														return {
-															...state,
-															errorMessage:
-																'Please select a username',
-														};
-													}
-												);
-											}
-										}}
-									>
-										Login
-									</Button>
-								)}
-
-								{this.props.isAuthenticated && (
-									<>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={(e) => {
-												this.props.getPendingOrders();
-											}}
-										>
-											Refresh Orders
-										</Button>{' '}
-										&nbsp;&nbsp;
-										<Button
-											variant="contained"
-											color="secondary"
-											onClick={(e) => {
-												this.props.signOutAction();
-											}}
-										>
-											Logout
-										</Button>
-									</>
-								)}
-							</Grid>
-						</Grid>
+						<WidgetHeader
+							isAuthenticated={this.props.isAuthenticated}
+							classes={classes}
+							users={this.props.users}
+							setError={(msg) => {
+								this.setErrorMessage(msg);
+							}}
+							getPendingOrders={() => {
+								this.props.getPendingOrders();
+							}}
+							signOutAction={() => {
+								this.props.signOutAction();
+							}}
+							signInAction={(selectedUser) => {
+								this.props.signInAction(selectedUser);
+							}}
+						/>
 					</Grid>
 
 					<Grid
@@ -271,10 +187,10 @@ const mapStateToProps = (state) => {
 
 export default useStyles(
 	connect(mapStateToProps, {
-		signInAction,
-		signOutAction,
 		getUsers,
 		getPendingOrders,
 		selectOrder,
+		signInAction,
+		signOutAction,
 	})(Login)
 );
