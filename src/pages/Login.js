@@ -48,15 +48,10 @@ class Login extends React.Component {
 
 	handleChange = (event) => {
 		const value = event.target.value;
-		if (value === '') {
-			this.setState((state) => {
-				return { ...state, errorMessage: 'Please select a user' };
-			});
-		} else {
-			this.setState((state) => {
-				return { ...state, selectedUser: value };
-			});
-		}
+
+		this.setState((state) => {
+			return { ...state, selectedUser: value };
+		});
 	};
 
 	componentDidMount() {
@@ -72,6 +67,9 @@ class Login extends React.Component {
 				<Container fixed>
 					<Grid container>
 						<Grid item xs={12} md={6}>
+							{this.state.errorMessage !== '' && (
+								<p> {this.state.errorMessage}</p>
+							)}
 							<h1>Staff </h1>
 						</Grid>
 						<Grid container item xs={12} md={6}>
@@ -115,7 +113,29 @@ class Login extends React.Component {
 										variant="contained"
 										color="primary"
 										onClick={(e) => {
-											this.props.signInAction();
+											if (
+												this.state.selectedUser !== ''
+											) {
+												this.setState(
+													(state, props) => {
+														return {
+															...state,
+															errorMessage: '',
+														};
+													}
+												);
+												this.props.signInAction();
+											} else {
+												this.setState(
+													(state, props) => {
+														return {
+															...state,
+															errorMessage:
+																'Please select a username',
+														};
+													}
+												);
+											}
 										}}
 									>
 										Login
@@ -126,6 +146,9 @@ class Login extends React.Component {
 									<Button
 										variant="contained"
 										color="secondary"
+										onClick={(e) => {
+											this.props.signOutAction();
+										}}
 									>
 										Logout
 									</Button>
@@ -181,7 +204,7 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log(state);
+	// console.log(state);
 	const { user } = state;
 	return { username: user.username, isAuthenticated: user.isAuthenticated };
 };
