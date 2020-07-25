@@ -5,7 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import { signInAction, signOutAction } from '../actions';
+import {
+	signInAction,
+	signOutAction,
+	getUsers,
+	getPendingOrders,
+} from '../actions';
 import { connect } from 'react-redux';
 
 const useStyles = withStyles((theme) => ({
@@ -25,22 +30,10 @@ const useStyles = withStyles((theme) => ({
 	},
 }));
 
-const staff = [
-	{
-		id: 1,
-		username: 'Stehpen',
-	},
-	{
-		id: 2,
-		username: 'Liz',
-	},
-];
-
 class Login extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			users: null,
 			selectedUser: '',
 			errorMessage: '',
 		};
@@ -48,16 +41,13 @@ class Login extends React.Component {
 
 	handleChange = (event) => {
 		const value = event.target.value;
-
 		this.setState((state) => {
 			return { ...state, selectedUser: value };
 		});
 	};
 
 	componentDidMount() {
-		this.setState((state, props) => {
-			return { ...state, users: staff };
-		});
+		this.props.getUsers();
 	}
 
 	render() {
@@ -92,12 +82,15 @@ class Login extends React.Component {
 												aria-label="None"
 												value=""
 											/>
-											{this.state.users &&
-												this.state.users.map((user) => {
+											{this.props.users &&
+												this.props.users.length &&
+												this.props.users.map((user) => {
 													return (
 														<option
 															key={user.id}
-															value={user}
+															value={
+																user.username
+															}
 														>
 															{user.username}
 														</option>
@@ -124,7 +117,9 @@ class Login extends React.Component {
 														};
 													}
 												);
-												this.props.signInAction();
+												this.props.signInAction(
+													this.state.selectedUser
+												);
 											} else {
 												this.setState(
 													(state, props) => {
@@ -143,15 +138,27 @@ class Login extends React.Component {
 								)}
 
 								{this.props.isAuthenticated && (
-									<Button
-										variant="contained"
-										color="secondary"
-										onClick={(e) => {
-											this.props.signOutAction();
-										}}
-									>
-										Logout
-									</Button>
+									<>
+										<Button
+											variant="contained"
+											color="primary"
+											onClick={(e) => {
+												this.props.getPendingOrders();
+											}}
+										>
+											Refresh Orders
+										</Button>{' '}
+										&nbsp;&nbsp;
+										<Button
+											variant="contained"
+											color="secondary"
+											onClick={(e) => {
+												this.props.signOutAction();
+											}}
+										>
+											Logout
+										</Button>
+									</>
 								)}
 							</Grid>
 						</Grid>
@@ -204,11 +211,22 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	// console.log(state);
-	const { user } = state;
-	return { username: user.username, isAuthenticated: user.isAuthenticated };
+	console.log(state);
+	const { auth } = state;
+	return {
+		users: auth.users,
+		username: auth.username,
+		gtype: auth.gtype,
+		isAuthenticated: auth.isAuthenticated,
+		pendingorders: auth.pendingorders,
+	};
 };
 
 export default useStyles(
-	connect(mapStateToProps, { signInAction, signOutAction })(Login)
+	connect(mapStateToProps, {
+		signInAction,
+		signOutAction,
+		getUsers,
+		getPendingOrders,
+	})(Login)
 );
