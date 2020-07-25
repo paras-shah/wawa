@@ -195,18 +195,27 @@ class Login extends React.Component {
 							isAuthenticated={this.state.isAuthenticated}
 							orders={this.getOrdersByType('Veg')}
 							classes={classes}
+							onSelect={() => {
+								console.log('Veg');
+							}}
 						/>
 						<OrderColumn
 							heading={'Non Veg Orders'}
 							isAuthenticated={this.state.isAuthenticated}
 							orders={this.getOrdersByType('NonVeg')}
 							classes={classes}
+							onSelect={() => {
+								console.log('NonVeg');
+							}}
 						/>
 						<OrderColumn
 							heading={'Drinks'}
 							isAuthenticated={this.state.isAuthenticated}
 							orders={this.getOrdersByType('Drinks')}
 							classes={classes}
+							onSelect={() => {
+								console.log('Drink');
+							}}
 						/>
 					</Grid>
 				</Container>
