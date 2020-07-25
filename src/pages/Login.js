@@ -40,6 +40,7 @@ class Login extends React.Component {
 			errorMessage: '',
 			isBusy: false,
 		};
+		console.log('const');
 	}
 
 	handleChange = (event) => {
@@ -48,6 +49,23 @@ class Login extends React.Component {
 			return { ...state, selectedUser: value };
 		});
 	};
+
+	updateStatus = (value) => {
+		this.setState((state) => {
+			return { ...state, isBusy: value };
+		});
+	};
+
+	componentDidUpdate(prevProps, prevState) {
+		console.log('U', prevState.isBusy);
+		console.log('U', this.state.isBusy);
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		console.log('SU', this.state.isBusy);
+		console.log('sU', nextState.isBusy);
+		return true;
+	}
 
 	componentDidMount() {
 		this.props.getUsers();
@@ -70,7 +88,7 @@ class Login extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-
+		console.log('render', this.state.isBusy);
 		return (
 			<>
 				<Container fixed>
@@ -194,10 +212,11 @@ class Login extends React.Component {
 						</Grid>
 						<OrderColumn
 							heading={'Veg Orders'}
-							isAuthenticated={this.state.isAuthenticated}
+							isBusy={this.state.isBusy}
 							orders={this.getOrdersByType('Veg')}
 							classes={classes}
 							onSelect={(orderId) => {
+								this.updateStatus(orderId);
 								this.props.selectOrder(
 									this.props.username,
 									'Veg',
@@ -207,10 +226,11 @@ class Login extends React.Component {
 						/>
 						<OrderColumn
 							heading={'Non Veg Orders'}
-							isAuthenticated={this.state.isAuthenticated}
+							isBusy={this.state.isBusy}
 							orders={this.getOrdersByType('NonVeg')}
 							classes={classes}
 							onSelect={(orderId) => {
+								this.updateStatus(orderId);
 								this.props.selectOrder(
 									this.props.username,
 									'NonVeg'
@@ -219,10 +239,11 @@ class Login extends React.Component {
 						/>
 						<OrderColumn
 							heading={'Drinks'}
-							isAuthenticated={this.state.isAuthenticated}
+							isBusy={this.state.isBusy}
 							orders={this.getOrdersByType('Drinks')}
 							classes={classes}
 							onSelect={(orderId) => {
+								this.updateStatus(orderId);
 								this.props.selectOrder(
 									this.props.username,
 									'Drink'

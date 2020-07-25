@@ -116,7 +116,7 @@ export const selectOrder = (username, type, order) => {
 			.post(url)
 			.then(() => {})
 			.catch(() => {
-				alert(type + ' order ' + order + ' selected');
+				//alert(type + ' order ' + order + ' selected');
 			});
 	};
 };
