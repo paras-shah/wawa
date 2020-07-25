@@ -48,13 +48,15 @@ class Login extends React.Component {
 
 	handleChange = (event) => {
 		const value = event.target.value;
-		if (value == '') {
-			return { ...state, errorMessage: 'Please select a user' };
+		if (value === '') {
+			this.setState((state) => {
+				return { ...state, errorMessage: 'Please select a user' };
+			});
+		} else {
+			this.setState((state) => {
+				return { ...state, selectedUser: value };
+			});
 		}
-
-		this.setState((state) => {
-			return { ...state, selectedUser: value };
-		});
 	};
 
 	componentDidMount() {
@@ -74,33 +76,38 @@ class Login extends React.Component {
 						</Grid>
 						<Grid container item xs={12} md={6}>
 							<Grid item xs={12} md={6}>
-								<FormControl
-									variant="outlined"
-									className={classes.selectUser}
-								>
-									<InputLabel htmlFor="outlined-age-native-simple">
-										Select Username
-									</InputLabel>
-									<Select
-										native
-										value={this.state.selectedUser}
-										onChange={this.handleChange}
-										label="Username"
+								{!this.props.isAuthenticated && (
+									<FormControl
+										variant="outlined"
+										className={classes.selectUser}
 									>
-										<option aria-label="None" value="" />
-										{this.state.users &&
-											this.state.users.map((user) => {
-												return (
-													<option
-														key={user.id}
-														value={user}
-													>
-														{user.username}
-													</option>
-												);
-											})}
-									</Select>
-								</FormControl>
+										<InputLabel htmlFor="outlined-age-native-simple">
+											Select Username
+										</InputLabel>
+										<Select
+											native
+											value={this.state.selectedUser}
+											onChange={this.handleChange}
+											label="Username"
+										>
+											<option
+												aria-label="None"
+												value=""
+											/>
+											{this.state.users &&
+												this.state.users.map((user) => {
+													return (
+														<option
+															key={user.id}
+															value={user}
+														>
+															{user.username}
+														</option>
+													);
+												})}
+										</Select>
+									</FormControl>
+								)}
 							</Grid>
 							<Grid item xs={12} md={6}>
 								{!this.props.isAuthenticated && (
