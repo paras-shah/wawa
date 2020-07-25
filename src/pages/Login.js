@@ -109,6 +109,9 @@ class Login extends React.Component {
 								this.props.getPendingOrders();
 							}}
 							signOutAction={() => {
+								this.setState((state) => {
+									return { ...state, isBusy: false };
+								});
 								this.props.signOutAction();
 							}}
 							signInAction={(selectedUser) => {

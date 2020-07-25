@@ -22,6 +22,7 @@ export default (state = INITIAL_STATE, action) => {
 				...state,
 				username: null,
 				isAuthenticated: false,
+				pendingorders: null,
 			};
 		case POPULATE_USER:
 			return {
