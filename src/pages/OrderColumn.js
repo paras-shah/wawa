@@ -14,7 +14,7 @@ function OrderColumn(props) {
 								variant="contained"
 								color="primary"
 								onClick={(e) => {
-									props.onSelect();
+									props.onSelect(props.orders.split(',')[0]);
 								}}
 							>
 								Are you taking this?

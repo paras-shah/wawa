@@ -109,3 +109,14 @@ export const getPendingOrders = () => {
 			});
 	};
 };
+
+export const selectOrder = (username, type, order) => {
+	return async (dispatch) => {
+		await axios
+			.post(url)
+			.then(() => {})
+			.catch(() => {
+				alert(type + ' order ' + order + ' selected');
+			});
+	};
+};

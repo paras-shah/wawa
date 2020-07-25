@@ -10,6 +10,7 @@ import {
 	signOutAction,
 	getUsers,
 	getPendingOrders,
+	selectOrder,
 } from '../actions';
 import { connect } from 'react-redux';
 import OrderColumn from './OrderColumn';
@@ -195,8 +196,12 @@ class Login extends React.Component {
 							isAuthenticated={this.state.isAuthenticated}
 							orders={this.getOrdersByType('Veg')}
 							classes={classes}
-							onSelect={() => {
-								console.log('Veg');
+							onSelect={(orderId) => {
+								this.props.selectOrder(
+									this.props.username,
+									'Veg',
+									orderId
+								);
 							}}
 						/>
 						<OrderColumn
@@ -204,8 +209,11 @@ class Login extends React.Component {
 							isAuthenticated={this.state.isAuthenticated}
 							orders={this.getOrdersByType('NonVeg')}
 							classes={classes}
-							onSelect={() => {
-								console.log('NonVeg');
+							onSelect={(orderId) => {
+								this.props.selectOrder(
+									this.props.username,
+									'NonVeg'
+								);
 							}}
 						/>
 						<OrderColumn
@@ -213,8 +221,11 @@ class Login extends React.Component {
 							isAuthenticated={this.state.isAuthenticated}
 							orders={this.getOrdersByType('Drinks')}
 							classes={classes}
-							onSelect={() => {
-								console.log('Drink');
+							onSelect={(orderId) => {
+								this.props.selectOrder(
+									this.props.username,
+									'Drink'
+								);
 							}}
 						/>
 					</Grid>
@@ -242,5 +253,6 @@ export default useStyles(
 		signOutAction,
 		getUsers,
 		getPendingOrders,
+		selectOrder,
 	})(Login)
 );
