@@ -30,14 +30,14 @@ export const data = `{
 export const data2 = `{
 	"pendingorders": [{
 			"gtype": "Veg",
-			"orders": "['0111','0112','0113']"
+			"orders": "0111,0112,0113"
 		},
 		{
 			"gtype": "NonVeg",
-			"orders": "['X111','X112','VX113']"
+			"orders": "NV0111,NV0112,NV0113"
 		}, {
 			"gtype": "Drinks",
-			"orders": "['UX1','UX12','UVX13']"
+			"orders": "D0111,D0112,D0113"
 		}
 	]
 }`;

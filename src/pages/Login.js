@@ -12,6 +12,7 @@ import {
 	getPendingOrders,
 } from '../actions';
 import { connect } from 'react-redux';
+import OrderColumn from './OrderColumn';
 
 const useStyles = withStyles((theme) => ({
 	root: {
@@ -50,8 +51,24 @@ class Login extends React.Component {
 		this.props.getUsers();
 	}
 
+	getOrdersByType = (type) => {
+		if (!this.props.pendingorders) {
+			return null;
+		}
+		const order =
+			this.props.pendingorders &&
+			this.props.pendingorders.filter(({ gtype }) => {
+				return this.props.gtype.includes(type) && gtype === type && type
+					? true
+					: false;
+			});
+
+		return order.length ? order[0].orders : null;
+	};
+
 	render() {
-		const classes = this.props.classes;
+		const { classes } = this.props;
+
 		return (
 			<>
 				<Container fixed>
@@ -173,36 +190,24 @@ class Login extends React.Component {
 						<Grid item xs={12} className="flexContainer">
 							<h3>Pending Orders</h3>
 						</Grid>
-						<Grid item xs={12} md={4} className={classes.container}>
-							<div>
-								<h3>Veg Orders</h3>
-								<ul>
-									{!this.state.isAuthenticated && (
-										<li> No orders</li>
-									)}
-								</ul>
-							</div>
-						</Grid>
-						<Grid item xs={12} md={4} className={classes.container}>
-							<div>
-								<h3>Non Veg Orders</h3>
-								<ul>
-									{!this.state.isAuthenticated && (
-										<li> No orders</li>
-									)}
-								</ul>
-							</div>
-						</Grid>
-						<Grid item xs={12} md={4} className={classes.container}>
-							<div>
-								<h3>Drinks</h3>
-								<ul>
-									{!this.state.isAuthenticated && (
-										<li> No orders</li>
-									)}
-								</ul>
-							</div>
-						</Grid>
+						<OrderColumn
+							heading={'Veg Orders'}
+							isAuthenticated={this.state.isAuthenticated}
+							orders={this.getOrdersByType('Veg')}
+							classes={classes}
+						/>
+						<OrderColumn
+							heading={'Non Veg Orders'}
+							isAuthenticated={this.state.isAuthenticated}
+							orders={this.getOrdersByType('NonVeg')}
+							classes={classes}
+						/>
+						<OrderColumn
+							heading={'Drinks'}
+							isAuthenticated={this.state.isAuthenticated}
+							orders={this.getOrdersByType('Drinks')}
+							classes={classes}
+						/>
 					</Grid>
 				</Container>
 			</>
