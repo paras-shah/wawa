@@ -5,7 +5,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 
 function WidgetHeader(props) {
-	const { classes, users, isAuthenticated } = props;
+	const { classes, users, isAuthenticated, isBusy } = props;
 	const [selectedUser, setUser] = React.useState('');
 
 	const handleChange = (event) => {

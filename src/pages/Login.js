@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Container } from '@material-ui/core/';
+import { Grid, Typography, Container, Button } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 
 import {
@@ -92,11 +92,32 @@ class Login extends React.Component {
 			<>
 				<Container fixed>
 					<Grid container>
-						<Grid item xs={12} md={6}>
+						<Grid item xs={12} md={2}>
 							{this.state.errorMessage !== '' && (
 								<p> {this.state.errorMessage}</p>
 							)}
 							<h1>Staff </h1>
+						</Grid>
+						<Grid item xs={12} md={4}>
+							{this.state.isBusy && (
+								<>
+									<Typography
+										display={'inline'}
+										variant={'body1'}
+									>
+										Occupied with Order#
+										{this.state.isBusy}
+									</Typography>
+
+									<Button
+										variant="contained"
+										color="secondary"
+										onClick={(e) => {}}
+									>
+										Done
+									</Button>
+								</>
+							)}
 						</Grid>
 						<WidgetHeader
 							isAuthenticated={this.props.isAuthenticated}
