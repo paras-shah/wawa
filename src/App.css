@@ -1,0 +1,15 @@
+.flexContainer {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	padding: 10px;
+	border: solid 1px grey;
+}
+
+.flexContainer li {
+	padding: 10px;
+	list-style-type: none;
+}
+.flexContainer li a {
+	text-transform: none;
+}
